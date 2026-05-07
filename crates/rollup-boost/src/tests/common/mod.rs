@@ -5,7 +5,7 @@ use crate::{EngineApiClient, OpExecutionPayloadEnvelope, PayloadVersion};
 use crate::{NewPayload, PayloadSource};
 use alloy_eips::Encodable2718;
 use alloy_primitives::{B256, Bytes, TxKind, U256, address, hex};
-use alloy_rpc_types_engine::{ExecutionPayload, JwtSecret};
+use alloy_rpc_types_engine::ExecutionPayload;
 use alloy_rpc_types_engine::{
     ForkchoiceState, ForkchoiceUpdated, PayloadAttributes, PayloadId, PayloadStatus,
     PayloadStatusEnum,
@@ -23,6 +23,7 @@ use op_alloy_consensus::TxDeposit;
 use op_alloy_rpc_types_engine::OpPayloadAttributes;
 use parking_lot::Mutex;
 use proxy::{BuilderProxyHandler, start_proxy_server};
+use reth_rpc_layer::JwtSecret;
 use serde_json::Value;
 use services::op_reth::{AUTH_RPC_PORT, OpRethConfig, OpRethImage, OpRethMehods, P2P_PORT};
 use services::rollup_boost::{RollupBoost, RollupBoostConfig};
@@ -510,6 +511,7 @@ impl SimpleBlockGenerator {
                         timestamp,
                         prev_randao: B256::ZERO,
                         suggested_fee_recipient: Default::default(),
+                        slot_number: None,
                     },
                     transactions: txns,
                     no_tx_pool: Some(empty_blocks),

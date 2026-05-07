@@ -746,7 +746,6 @@ pub mod tests {
     use crate::proxy::ProxyLayer;
     use alloy_primitives::hex;
     use alloy_primitives::{FixedBytes, U256};
-    use alloy_rpc_types_engine::JwtSecret;
     use alloy_rpc_types_engine::{
         BlobsBundleV1, ExecutionPayloadV1, ExecutionPayloadV2, PayloadStatusEnum,
     };
@@ -755,6 +754,7 @@ pub mod tests {
     use jsonrpsee::http_client::HttpClient;
     use jsonrpsee::server::{Server, ServerBuilder, ServerHandle};
     use parking_lot::Mutex;
+    use reth_rpc_layer::JwtSecret;
     use std::net::SocketAddr;
     use std::str::FromStr;
     use std::sync::Arc;

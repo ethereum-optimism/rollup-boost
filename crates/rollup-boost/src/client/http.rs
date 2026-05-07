@@ -3,7 +3,6 @@ use std::time::Duration;
 use crate::client::auth::AuthLayer;
 use crate::payload::PayloadSource;
 use alloy_primitives::bytes::Bytes;
-use alloy_rpc_types_engine::JwtSecret;
 use http::Uri;
 use http_body_util::{BodyExt, Full};
 use hyper::body::Body;
@@ -14,6 +13,7 @@ use hyper_util::rt::TokioExecutor;
 use jsonrpsee::core::BoxError;
 use jsonrpsee::server::HttpBody;
 use opentelemetry::trace::SpanKind;
+use reth_rpc_layer::JwtSecret;
 use tower::{
     Service as _, ServiceBuilder, ServiceExt,
     timeout::{Timeout, TimeoutLayer},

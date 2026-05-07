@@ -134,7 +134,6 @@ mod tests {
 
     use super::*;
     use alloy_primitives::{B256, Bytes, U64, U128, hex};
-    use alloy_rpc_types_engine::JwtSecret;
     use alloy_rpc_types_eth::erc4337::TransactionConditional;
     use http::{StatusCode, Uri};
     use http_body_util::{BodyExt, Full};
@@ -151,6 +150,7 @@ mod tests {
         rpc_params,
         server::{ServerBuilder, ServerHandle},
     };
+    use reth_rpc_layer::JwtSecret;
     use serde_json::json;
     use std::{net::SocketAddr, sync::Arc};
     use tokio::net::TcpListener;

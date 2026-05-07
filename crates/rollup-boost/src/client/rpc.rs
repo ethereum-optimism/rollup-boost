@@ -6,11 +6,10 @@ use crate::server::EngineApiClient;
 use crate::version::{CARGO_PKG_VERSION, VERGEN_GIT_SHA};
 use alloy_primitives::{B256, Bytes};
 use alloy_rpc_types_engine::{
-    ExecutionPayloadV3, ForkchoiceState, ForkchoiceUpdated, JwtError, JwtSecret, PayloadId,
-    PayloadStatus,
+    ExecutionPayloadV3, ForkchoiceState, ForkchoiceUpdated, PayloadId, PayloadStatus,
 };
 use alloy_rpc_types_eth::{Block, BlockNumberOrTag};
-use clap::{Parser, arg};
+use clap::Parser;
 use eyre::bail;
 use http::{HeaderMap, Uri};
 use jsonrpsee::core::async_trait;
@@ -24,10 +23,11 @@ use op_alloy_rpc_types_engine::{
 };
 use opentelemetry::trace::SpanKind;
 use paste::paste;
+use reth_rpc_layer::{JwtError, JwtSecret};
 use std::path::PathBuf;
 use std::time::Duration;
 use thiserror::Error;
-use tracing::{error, info, instrument};
+use tracing::{info, instrument};
 
 use super::auth::Auth;
 
@@ -477,7 +477,6 @@ pub mod tests {
     use parking_lot::Mutex;
 
     use crate::payload::PayloadSource;
-    use alloy_rpc_types_engine::JwtSecret;
     use jsonrpsee::core::client::Error as ClientError;
     use jsonrpsee::server::{ServerBuilder, ServerHandle};
     use jsonrpsee::{RpcModule, rpc_params};

@@ -22,8 +22,11 @@ pub struct ExecutionPayloadFlashblockDeltaV1 {
     pub gas_used: u64,
     /// The block hash of the block.
     pub block_hash: B256,
-    /// The transactions of the block.
+    /// The transactions newly included by this flashblock.
     pub transactions: Vec<Bytes>,
+    /// Latest mutable synthetic post-exec transaction for the materialized block view.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub post_exec_tx: Option<Bytes>,
     /// Array of [`Withdrawal`] enabled with V2
     pub withdrawals: Vec<Withdrawal>,
     /// The withdrawals root of the block.
@@ -79,4 +82,39 @@ pub struct FlashblocksPayloadV1 {
     pub diff: ExecutionPayloadFlashblockDeltaV1,
     /// Additional metadata associated with the flashblock
     pub metadata: Value,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use alloy_primitives::bytes;
+
+    #[test]
+    fn missing_post_exec_tx_deserializes_as_none() {
+        let value = serde_json::to_value(ExecutionPayloadFlashblockDeltaV1::default()).unwrap();
+        assert!(value.get("post_exec_tx").is_none());
+
+        let decoded: ExecutionPayloadFlashblockDeltaV1 = serde_json::from_value(value).unwrap();
+        assert_eq!(decoded.post_exec_tx, None);
+    }
+
+    #[test]
+    fn post_exec_tx_is_omitted_only_when_none() {
+        let without_post_exec = serde_json::to_value(ExecutionPayloadFlashblockDeltaV1 {
+            post_exec_tx: None,
+            ..Default::default()
+        })
+        .unwrap();
+        assert!(without_post_exec.get("post_exec_tx").is_none());
+
+        let with_post_exec = serde_json::to_value(ExecutionPayloadFlashblockDeltaV1 {
+            post_exec_tx: Some(bytes!("0x7d01")),
+            ..Default::default()
+        })
+        .unwrap();
+        assert_eq!(
+            with_post_exec.get("post_exec_tx").unwrap(),
+            &serde_json::json!("0x7d01")
+        );
+    }
 }
